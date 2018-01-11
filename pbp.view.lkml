@@ -2,77 +2,78 @@ view: pbp {
   sql_table_name: nba_data.pbp ;;
 
   dimension: eventmsgactiontype {
-    type: string
+    type: number
     sql: ${TABLE}.EVENTMSGACTIONTYPE ;;
   }
 
   dimension: event_type {
-    type: string
+    hidden: yes
+    type: number
     sql: ${TABLE}.EVENTMSGTYPE ;;
   }
-
   dimension: play_type {
     case: {
       when: {
-        sql: ${event_type} = "1" ;;
+        sql: ${event_type} = 1 ;;
         label: "Made shot attempt"
       }
       when: {
-        sql: ${event_type} = "2" ;;
+        sql: ${event_type} = 2 ;;
         label: "Missed shot attempt"
       }
       when: {
-        sql: ${event_type} = "3" ;;
+        sql: ${event_type} = 3 ;;
         label: "Free throw"
       }
       when: {
-        sql: ${event_type} = "4" ;;
-        label: "Defense rebound"
+        sql: ${event_type} = 4 ;;
+        label: "Rebound"
       }
       when: {
-        sql: ${event_type} = "5" ;;
+        sql: ${event_type} = 5 ;;
         label: "Turnover"
       }
       when: {
-        sql: ${event_type} = "6" ;;
+        sql: ${event_type} = 6 ;;
         label: "Shooting foul"
       }
       when: {
-        sql: ${event_type} = "7" ;;
+        sql: ${event_type} = 7 ;;
         label: "Goaltending"
       }
       when: {
-        sql: ${event_type} = "8" ;;
+        sql: ${event_type} = 8 ;;
         label: "Substitution"
       }
       when: {
-        sql: ${event_type} = "9" ;;
+        sql: ${event_type} = 9 ;;
         label: "Timeout"
       }
       when: {
-        sql: ${event_type} = "10" ;;
+        sql: ${event_type} = 10 ;;
         label: "Jump Ball"
       }
       when: {
-        sql: ${event_type} = "11" ;;
+        sql: ${event_type} = 11 ;;
         label: "Ejection"
       }when: {
-        sql: ${event_type} = "12" ;;
+        sql: ${event_type} = 12 ;;
         label: "Start of quarter"
       }
       when: {
-        sql: ${event_type} = "13" ;;
+        sql: ${event_type} = 13 ;;
         label: "End of quarter"
       }
     }
   }
-
-  dimension: eventnum {
+  dimension: event_num {
+    label: "Event Number"
     type: number
-    sql: CAST(${TABLE}.EVENTNUM AS INT64) ;;
+    sql: ${TABLE}.EVENTNUM ;;
   }
 
   dimension: game_id {
+    label: "Game ID"
     type: string
     sql: ${TABLE}.GAME_ID ;;
   }
@@ -92,31 +93,23 @@ view: pbp {
     sql: ${TABLE}.PCTIMESTRING ;;
   }
 
-  dimension: time {
-    type: number
-    sql: CASE WHEN ${period} > 4
-    THEN 48*60 + (${period}-4)*5*60-(CAST(SPLIT(${pctimestring}, ':')[OFFSET(0)] AS INT64)*60 + CAST(SPLIT(${pctimestring}, ':')[OFFSET(1)] AS INT64))
-    ELSE 12*60*${period} - (CAST(SPLIT(${pctimestring}, ':')[OFFSET(0)] AS INT64)*60 + CAST(SPLIT(${pctimestring}, ':')[OFFSET(1)] AS INT64))
-    END;;
-  }
-
   dimension: period {
     type: number
-    sql: CAST(${TABLE}.PERIOD AS INT64) ;;
+    sql: ${TABLE}.PERIOD ;;
   }
 
   dimension: person1_type {
-    type: string
+    type: number
     sql: ${TABLE}.PERSON1TYPE ;;
   }
 
   dimension: person2_type {
-    type: string
+    type: number
     sql: ${TABLE}.PERSON2TYPE ;;
   }
 
   dimension: person3_type {
-    type: string
+    type: number
     sql: ${TABLE}.PERSON3TYPE ;;
   }
 
@@ -215,18 +208,8 @@ view: pbp {
     sql: ${TABLE}.SCORE ;;
   }
 
-  dimension: home_score {
-    type: number
-    sql: CAST(SPLIT(${score}, ' - ')[OFFSET(1)] AS INT64) ;;
-  }
-
-  dimension: visitor_score {
-    type: number
-    sql: CAST(SPLIT(${score}, ' - ')[OFFSET(0)] AS INT64) ;;
-  }
-
   dimension: scoremargin {
-    type: string
+    type: number
     sql: ${TABLE}.SCOREMARGIN ;;
   }
 
@@ -245,15 +228,16 @@ view: pbp {
     drill_fields: [detail*]
   }
 
-  ###New stuff
-
-  dimension: made {
-    type: number
-    sql: CASE WHEN ${event_type} = "1" THEN 1
-              WHEN ${event_type} = "2" THEN 0
-              ELSE NULL
-          END;;
-
+  measure: jumpball_count {
+    type: count
+    filters: {
+      field: event_num
+      value: "4"
+    }
+    filters: {
+      field: play_type
+      value: "Jump Ball"
+    }
   }
 
   # ----- Sets of fields for drilling ------

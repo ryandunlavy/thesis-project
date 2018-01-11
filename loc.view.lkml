@@ -12,12 +12,12 @@ view: loc {
     sql: ${TABLE}.gameid ;;
   }
 
-  dimension: x {
+  dimension: xloc {
     type: number
     sql: ${TABLE}.xloc ;;
   }
 
-  dimension: y {
+  dimension: yloc {
     type: number
     sql: ${TABLE}.yloc ;;
   }
