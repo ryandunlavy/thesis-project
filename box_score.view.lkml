@@ -2,6 +2,8 @@ view: box_score {
   sql_table_name: nba_data.box_score ;;
 
 
+
+
   dimension: comment {
     type: string
     sql: ${TABLE}.COMMENT ;;
@@ -15,6 +17,10 @@ view: box_score {
   dimension: player_name {
     type: string
     sql: ${TABLE}.PLAYER_NAME ;;
+    link: {
+      label: "Player Dashboard"
+      url: "/dashboards/6?Player={{ value }}"
+    }
   }
 
   dimension: start_position {
@@ -26,9 +32,6 @@ view: box_score {
     type: yesno
     sql: ${start_position} IS NOT NULL ;;
   }
-
-
-
 
   dimension: ast {
     label: "AST"
@@ -127,8 +130,9 @@ view: box_score {
   dimension: min {
     label: "MIN"
     description: "Minutes Played"
-    type: string
-    sql: ${TABLE}.MIN ;;
+    type: number
+    value_format: "0.#"
+    sql: (CAST(SPLIT(${TABLE}.MIN, ':')[OFFSET(0)] AS INT64)*60 + CAST(SPLIT(${TABLE}.MIN, ':')[OFFSET(1)] AS INT64))/60.0 ;;
   }
 
   dimension: oreb {
@@ -189,10 +193,7 @@ view: box_score {
     sql: ${TABLE}.TEAM_ID ;;
   }
 
-  dimension: team_name {
-    type: string
-    sql: ${TABLE}.TEAM_NAME ;;
-  }
+
 
   dimension: to {
     label: "TO"
@@ -203,11 +204,12 @@ view: box_score {
 
   measure: count {
     type: count
-    drill_fields: [team_name]
+    drill_fields: []
   }
 
   measure: tot_ast {
     label: "Total AST"
+    drill_fields: [box_score_set*]
     description: "Total Assists"
     type: sum
     sql: ${TABLE}.AST ;;
@@ -241,7 +243,7 @@ view: box_score {
     sql: ${TABLE}.FG3M ;;
   }
 
-  measure: 3pt_pct {
+  measure: tot_3pt_pct {
     label: "FG3%"
     description: "3PT Field Goal Percentage"
     type: number
@@ -294,7 +296,8 @@ view: box_score {
     label: "Total MIN"
     description: "Total Minutes Played"
     type: sum
-    sql: ${TABLE}.MIN ;;
+    value_format: "0.#"
+    sql: ${min};;
   }
 
   measure: tot_oreb {
@@ -320,12 +323,14 @@ view: box_score {
 
   measure: tot_pts {
     label: "Total PTS"
+    drill_fields: [box_score_set*]
     description: "Cumulative Points Scored"
     type: sum
     sql: ${TABLE}.PTS ;;
   }
 
   measure: tot_reb {
+    drill_fields: [box_score_set*]
     label: "Total REB"
     description: "Total Rebounds"
     type: sum
@@ -346,9 +351,11 @@ view: box_score {
     sql: ${TABLE}.`TO` ;;
   }
   measure: avg_ast {
+
     label: "Average AST"
     description: "Average Assists"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.AST ;;
   }
 
@@ -356,6 +363,7 @@ view: box_score {
     label: "Average BLK"
     description: "Average Blocks"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.BLK ;;
   }
 
@@ -363,6 +371,7 @@ view: box_score {
     label: "Average DREB"
     description: "Average defensive rebounds"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.DREB ;;
   }
 
@@ -370,6 +379,7 @@ view: box_score {
     label: "Average FG3A"
     description: "Average 3PT Field Goal Attempts"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.FG3A ;;
   }
 
@@ -377,6 +387,7 @@ view: box_score {
     label: "Average FG3M"
     description: "Average 3PT Field Goal Makes"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.FG3M ;;
   }
 
@@ -384,6 +395,7 @@ view: box_score {
     label: "Average FGA"
     description: "Average Field Goal Attempts"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.FGA ;;
   }
 
@@ -391,6 +403,7 @@ view: box_score {
     label: "Average FG3M"
     description: "Average Field Goal Makes"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.FGM ;;
   }
 
@@ -399,6 +412,7 @@ view: box_score {
     label: "Average FTA"
     description: "Average Free Throw Attempts"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.FTA ;;
   }
 
@@ -406,6 +420,7 @@ view: box_score {
     label: "Average FTM"
     description: "Average Free Throw Makes"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.FTM ;;
   }
 
@@ -414,13 +429,15 @@ view: box_score {
     label: "Average MIN"
     description: "Average Minutes Played"
     type: average
-    sql: ${TABLE}.MIN ;;
+    value_format: "0.#"
+    sql: ${min} ;;
   }
 
   measure: avg_oreb {
     label: "Average OREB"
     description: "Average Offensive Rebounds"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.OREB ;;
   }
 
@@ -428,6 +445,7 @@ view: box_score {
     label: "Average PF"
     description: "Average Personal Fouls"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.PF ;;
   }
 
@@ -435,6 +453,7 @@ view: box_score {
     label: "Average Plus Minus"
     description: "Average Point Margin"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.PLUS_MINUS ;;
   }
 
@@ -442,6 +461,7 @@ view: box_score {
     label: "Average PTS"
     description: "Average Points Scored"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.PTS ;;
   }
 
@@ -449,6 +469,7 @@ view: box_score {
     label: "Average REB"
     description: "Average Rebounds"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.REB ;;
   }
 
@@ -456,6 +477,7 @@ view: box_score {
     label: "Average STL"
     description: "Average Steals"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.STL ;;
   }
 
@@ -463,6 +485,7 @@ view: box_score {
     label: "Average TO"
     description: "Average Turnovers"
     type: average
+    value_format: "0.#"
     sql: ${TABLE}.`TO` ;;
   }
 
@@ -475,14 +498,40 @@ view: box_score {
   measure: avg_game_score {
     label: "Average Game Score"
     type: average
+    value_format: "0.#"
     sql: ${game_score} ;;
   }
 
   measure: true_shooting {
     label: "TS%"
+    value_format: "0.#"
     description: "True Shooting percentage (PTS / (2 * (FGA + 0.44 * FTA)) )"
     sql: ${tot_pts} / (2*(${tot_fga}+0.44*${tot_fta}) ;;
   }
+
+  dimension: player_image {
+    sql: CONCAT("https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/", ${team_id}, "/2017/260x190/", ${player_id}, ".png") ;;
+    html: <img src="{{ value }}" width="137" height="100"/> ;;
+  }
+
+  dimension: player_image_large {
+    sql: CONCAT("https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/", ${team_id}, "/2017/260x190/", ${player_id}, ".png") ;;
+    html: <img src="{{ value }}" width="260" height="190"/> ;;
+  }
+  dimension: team_image {
+    sql: ${team_abbreviation} ;;
+    html: <img src="http://stats.nba.com/media/img/teams/logos/{{ value }}_logo.svg" width="100" height="100"/> ;;
+  }
+
+  dimension: team_image_large {
+    sql: ${team_abbreviation} ;;
+    html: <img src="http://stats.nba.com/media/img/teams/logos/{{ value }}_logo.svg" width="190" height="190"/> ;;
+  }
+
+  set: box_score_set {
+    fields: [min, pts, fgm, fga, fg_pct, fg3_a, fg3_m, fg3_pct, fta, ftm, ft_pct, oreb, dreb, reb, ast, to, stl, blk, pf, plus_minus]
+  }
+
 
 
 }

@@ -6,6 +6,25 @@ view: pbp {
     sql: ${TABLE}.EVENTMSGACTIONTYPE ;;
   }
 
+  dimension: is_shot {
+    type: yesno
+    sql: ${event_type}=1 OR ${event_type}=2 ;;
+  }
+
+  dimension: id {
+    hidden: yes
+    type: string
+    primary_key: yes
+    sql: CONCAT(${game_id}, ${event_num}) ;;
+  }
+
+  dimension: made_shot {
+    type: yesno
+    sql: ${event_type}=1 ;;
+  }
+
+
+
   dimension: event_type {
     hidden: yes
     type: number
@@ -111,6 +130,13 @@ view: pbp {
   dimension: person3_type {
     type: number
     sql: ${TABLE}.PERSON3TYPE ;;
+  }
+  dimension: time {
+    type: number
+    sql: CASE WHEN ${period} > 4
+    THEN 48*60 + (${period}-4)*5*60-(CAST(SPLIT(${pctimestring}, ':')[OFFSET(0)] AS INT64)*60 + CAST(SPLIT(${pctimestring}, ':')[OFFSET(1)] AS INT64))
+    ELSE 12*60*${period} - (CAST(SPLIT(${pctimestring}, ':')[OFFSET(0)] AS INT64)*60 + CAST(SPLIT(${pctimestring}, ':')[OFFSET(1)] AS INT64))
+    END;;
   }
 
   dimension: player1_id {
@@ -237,6 +263,22 @@ view: pbp {
     filters: {
       field: play_type
       value: "Jump Ball"
+    }
+  }
+
+  measure: count_made {
+    type: count
+    filters: {
+      field: event_type
+      value: "1"
+    }
+  }
+
+  measure: count_attempts {
+    type: count
+    filters: {
+      field: is_shot
+      value: "yes"
     }
   }
 

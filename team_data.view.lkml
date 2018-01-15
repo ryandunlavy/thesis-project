@@ -1,6 +1,13 @@
 view: team_data {
   sql_table_name: nba_data.team_data ;;
 
+  dimension: id {
+    hidden: yes
+    primary_key: yes
+    type: string
+    sql: CONCAT(${game_id},${team_abbreviation}) ;;
+  }
+
   dimension: ast {
     label: "AST"
     description: "Assists"
@@ -435,6 +442,16 @@ view: team_data {
     description: "Average Turnovers"
     type: average
     sql: ${TABLE}.`TO` ;;
+  }
+
+  dimension: team_image {
+    sql: ${team_abbreviation} ;;
+    html: <img src="http://stats.nba.com/media/img/teams/logos/{{ value }}_logo.svg" width="100" height="100"/> ;;
+  }
+
+  dimension: team_image_large {
+    sql: ${team_abbreviation} ;;
+    html: <img src="http://stats.nba.com/media/img/teams/logos/{{ value }}_logo.svg" width="190" height="190"/> ;;
   }
 
 }

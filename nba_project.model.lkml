@@ -31,12 +31,23 @@ explore: play_by_play {
 }
 
 explore: game_list {}
-explore: box_score {}
+explore: box_score {
+  join: game_list {
+    sql_on: ${box_score.game_id} = ${game_list.game_ids} ;;
+    relationship: many_to_one
+  }
+}
+
+
 explore: team_data {
   join: opposing_team {
     from: team_data
     sql_on: ${opposing_team.game_id} = ${team_data.game_id} AND ${opposing_team.team_id} != ${team_data.team_id} ;;
     relationship: one_to_one
+  }
+  join: game_list {
+    sql_on: ${team_data.game_id} = ${game_list.game_ids} ;;
+    relationship: many_to_one
   }
 }
 
