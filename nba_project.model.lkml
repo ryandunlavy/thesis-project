@@ -7,14 +7,34 @@ include: "*.view"
 include: "*.dashboard"
 
 
-datagroup: ryan_thesis_default_datagroup {
-  # sql_trigger: SELECT MAX(id) FROM etl_log;;
-  max_cache_age: "1 hour"
+datagroup: nba_trigger {
+  sql_trigger: SELECT MAX(GAME_ID) FROM nba_data.pbp;;
 }
 
-persist_with: ryan_thesis_default_datagroup
+persist_with: nba_trigger
 
 explore: loc {}
+
+explore: jump_ball {
+  join: game_list {
+    sql_on: ${game_list.game_ids} = ${jump_ball.game_id} ;;
+    type: left_outer
+    relationship: many_to_one
+  }
+}
+
+explore: shots {
+  join: loc {
+    sql_on: ${loc.gameid} = ${shots.game_id} AND ${loc.eventid} = ${shots.event_num} ;;
+    type: left_outer
+    relationship: one_to_one
+  }
+  join: game_list {
+    sql_on: ${game_list.game_ids} = ${shots.game_id} ;;
+    type: left_outer
+    relationship: many_to_one
+  }
+}
 
 explore: play_by_play {
   from: pbp
@@ -52,4 +72,9 @@ explore: team_data {
 }
 
 
-explore: rotations {}
+explore: rotations {
+  join: game_list {
+    sql_on: ${rotations.game_id} = ${game_list.game_ids} ;;
+    relationship: many_to_one
+  }
+}

@@ -1,13 +1,21 @@
 view: rotations {
   derived_table: {
-    sql:SELECT *,
-CASE WHEN prev_game_id != GAME_ID THEN 0
-WHEN GAME_ID != next_game_id THEN (SELECT MAX(CASE WHEN CAST(PERIOD AS INT64) > 4
-    THEN 48*60 + (CAST(PERIOD AS INT64)-4)*5*60-(CAST(SPLIT(PCTIMESTRING, ':')[OFFSET(0)] AS INT64)*60 + CAST(SPLIT(PCTIMESTRING, ':')[OFFSET(1)] AS INT64))
-    ELSE 12*60*CAST(PERIOD AS INT64) - (CAST(SPLIT(PCTIMESTRING, ':')[OFFSET(0)] AS INT64)*60 + CAST(SPLIT(PCTIMESTRING, ':')[OFFSET(1)] AS INT64)) FROM nba_data.pbp WHERE nba_data.pbp=GAME_ID)
-ELSE TIME FROM (SELECT * ,
+    sql:SELECT * FROM (SELECT *,
+  CASE WHEN SUB="In" AND prev_game_id!=GAME_ID THEN TIME
+       WHEN prev_game_id!=GAME_ID AND SUB="Out" THEN 0
+       ELSE prev_time
+       END AS sub_in_time,
+  CASE WHEN SUB="In" AND next_game_id!=GAME_ID THEN 48*60
+       ELSE TIME
+       END AS sub_out_time,
+  CASE WHEN (SUB="In" AND next_game_id!=GAME_ID) OR (prev_game_id!=GAME_ID AND SUB="Out") THEN "In"
+       ELSE prev_sub
+       END AS first_sub,
+  CASE WHEN (SUB="In" AND next_game_id!=GAME_ID) THEN "Out"
+       ELSE SUB
+       END AS second_sub
+FROM (SELECT * ,
 LAG(TIME,1) OVER (ORDER BY PLAYER, GAME_ID, TIME) AS prev_time,
-LAG(PLAYER,1) OVER (ORDER BY PLAYER, GAME_ID, TIME) AS prev_player,
 LAG(GAME_ID,1) OVER (ORDER BY PLAYER, GAME_ID, TIME) AS prev_game_id,
 LAG(SUB,1) OVER (ORDER BY PLAYER, GAME_ID, TIME) AS prev_sub,
 LAG(margin,1) OVER (ORDER BY PLAYER, GAME_ID, TIME) AS prev_margin,
@@ -36,11 +44,14 @@ FROM
     CASE WHEN HOMEDESCRIPTION IS NULL THEN -1*SCOREMARGIN
     ELSE SCOREMARGIN
     END AS margin
-    FROM nba_data.pbp WHERE EVENTMSGTYPE=8)))
-    WHERE PLAYER=prev_player)
+    FROM nba_data.pbp WHERE EVENTMSGTYPE=8)))) WHERE first_sub="In" AND second_sub="Out"
     ;;
   }
 
+  dimension: team {
+    type: string
+    sql: ${TABLE}.TEAM ;;
+  }
   dimension: game_id {
     type: string
     sql: ${TABLE}.GAME_ID ;;
@@ -51,15 +62,17 @@ FROM
     sql: ${TABLE}.PLAYER ;;
   }
 
-  dimension: time_in {
+  dimension: sub_in_time {
   type: number
-  sql: ${TABLE}.prev_time ;;
+  sql: ${TABLE}.first_sub ;;
   }
 
-  dimension: time_out {
+  dimension: sub_out_time {
     type: number
-    sql: ${TABLE}.TIME ;;
+    sql: ${TABLE}.second_sub ;;
   }
+
+
 
 
 }

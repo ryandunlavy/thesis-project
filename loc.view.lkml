@@ -26,4 +26,13 @@ view: loc {
     type: count
     drill_fields: []
   }
+
+  dimension: xtrans {
+    type: number
+    sql: ROUND(ABS(${xloc}/10));;
+  }
+  dimension: ytrans {
+    type: number
+    sql: ROUND(ABS(${yloc}/10));;
+  }
 }

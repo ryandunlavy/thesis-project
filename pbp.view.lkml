@@ -26,7 +26,7 @@ view: pbp {
 
 
   dimension: event_type {
-    hidden: yes
+   # hidden: yes
     type: number
     sql: ${TABLE}.EVENTMSGTYPE ;;
   }
@@ -115,6 +115,10 @@ view: pbp {
   dimension: period {
     type: number
     sql: ${TABLE}.PERIOD ;;
+  }
+  dimension: period_string {
+    type: string
+    sql: STRING(${period}) ;;
   }
 
   dimension: person1_type {
