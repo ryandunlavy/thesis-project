@@ -493,6 +493,7 @@ view: box_score {
     type: number
     sql: ${pts}+0.4*${fgm}-0.7*${fga}-0.4*(${fta}-${ftm})+0.7*${oreb}+0.3*${dreb}+${stl}+0.7*${ast}+0.7*${blk}-0.4*${pf}-${to} ;;
     description: "Game Score was created by John Hollinger to give a rough measure of a player's productivity for a single game. The scale is similar to that of points scored, (40 is an outstanding performance, 10 is an average performance, etc.)."
+    value_format: "0.##"
   }
 
   measure: avg_game_score {
@@ -512,11 +513,19 @@ view: box_score {
   dimension: player_image {
     sql: CONCAT("https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/", ${team_id}, "/2017/260x190/", ${player_id}, ".png") ;;
     html: <img src="{{ value }}" width="137" height="100"/> ;;
+    link: {
+      label: "Player Dashboard"
+      url: "/dashboards/6?Player={{ value }}"
+    }
   }
 
   dimension: player_image_large {
     sql: CONCAT("https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/", ${team_id}, "/2017/260x190/", ${player_id}, ".png") ;;
     html: <img src="{{ value }}" width="260" height="190"/> ;;
+    link: {
+      label: "Player Dashboard"
+      url: "/dashboards/6?Player={{ value }}"
+    }
   }
   dimension: team_image {
     sql: ${team_abbreviation} ;;

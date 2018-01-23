@@ -95,6 +95,10 @@ view: pbp {
     label: "Game ID"
     type: string
     sql: ${TABLE}.GAME_ID ;;
+    link: {
+      label: "Game Dashboard"
+      url: "/dashboards/7?Game={{ value }}"
+    }
   }
 
   dimension: homedescription {
@@ -118,7 +122,7 @@ view: pbp {
   }
   dimension: period_string {
     type: string
-    sql: STRING(${period}) ;;
+    sql: CAST(${period} AS STRING) ;;
   }
 
   dimension: person1_type {
@@ -256,6 +260,12 @@ view: pbp {
   measure: count {
     type: count
     drill_fields: [detail*]
+  }
+
+  measure: shooting_pct {
+    type: number
+    sql: ${count_made}/${count_attempts} ;;
+    value_format: "0.00%"
   }
 
   measure: jumpball_count {

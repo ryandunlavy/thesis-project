@@ -27,12 +27,24 @@ view: loc {
     drill_fields: []
   }
 
-  dimension: xtrans {
+  dimension: xfeet {
     type: number
-    sql: ROUND(ABS(${xloc}/10));;
+    sql: (${xloc})/10.0;;
   }
-  dimension: ytrans {
+  dimension: yfeet {
     type: number
-    sql: ROUND(ABS(${yloc}/10));;
+    sql: (${yloc})/10.0;;
+  }
+
+  dimension: distance {
+    description: "Distance from basket (in feet)"
+    type: number
+    sql: sqrt((${xfeet}*${xfeet})+(${yfeet}*${yfeet})) ;;
+    value_format: "0.#"
+  }
+
+  measure: average_distance {
+    type: average
+    sql: ${distance} ;;
   }
 }

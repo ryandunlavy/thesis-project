@@ -73,6 +73,7 @@ WHERE EVENTMSGTYPE=10 ;;
     type: number
     sql: 1.0*${jump_balls_won}/${total_jump_balls} ;;
     value_format: "0.00%"
+    drill_fields: [player_name, jump_balls_won, total_jump_balls]
   }
   dimension: won_jump_ball {
     type: yesno

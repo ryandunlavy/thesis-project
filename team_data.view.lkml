@@ -100,6 +100,10 @@ view: team_data {
     description: "Game ID"
     type: string
     sql: ${TABLE}.GAME_ID ;;
+    link: {
+      label: "Game Dashboard"
+      url: "/dashboards/7?Game={{ value }}"
+    }
   }
 
   dimension: min {

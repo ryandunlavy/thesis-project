@@ -13,6 +13,10 @@ view: game_list {
   dimension: game_ids {
     type: string
     sql: ${TABLE}.gameIds ;;
+    link: {
+      label: "Game Dashboard"
+      url: "/dashboards/7?Game={{ value }}"
+    }
   }
 
 
