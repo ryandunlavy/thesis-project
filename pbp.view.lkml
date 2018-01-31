@@ -1,4 +1,5 @@
 view: pbp {
+  label: "Play By Play"
   sql_table_name: nba_data.pbp ;;
 
   dimension: eventmsgactiontype {

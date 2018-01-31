@@ -458,4 +458,29 @@ view: team_data {
     html: <img src="http://stats.nba.com/media/img/teams/logos/{{ value }}_logo.svg" width="190" height="190"/> ;;
   }
 
+  dimension: won_game {
+    type: yesno
+    sql: ${plus_minus} > 0 ;;
+  }
+
+  measure: wins {
+    type: count
+    filters: {
+      field: won_game
+      value: "yes"
+    }
+  }
+
+  measure: losses {
+    type: count
+    filters: {
+      field: won_game
+      value: "no"
+    }
+  }
+
+  measure: win_percentage {
+    type: number
+    sql: ${wins}/${count} ;;
+  }
 }

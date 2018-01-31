@@ -15,6 +15,8 @@ persist_with: nba_trigger
 
 explore: loc {}
 
+explore: player_season {}
+
 explore: jump_ball {
   join: game_list {
     sql_on: ${game_list.game_ids} = ${jump_ball.game_id} ;;

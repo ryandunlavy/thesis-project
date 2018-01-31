@@ -1,4 +1,5 @@
 view: loc {
+  label: "Locations"
   sql_table_name: nba_data.loc ;;
 
   dimension: eventid {
@@ -40,11 +41,25 @@ view: loc {
     description: "Distance from basket (in feet)"
     type: number
     sql: sqrt((${xfeet}*${xfeet})+(${yfeet}*${yfeet})) ;;
-    value_format: "0.#"
+    value_format: "0.# \" ft\""
+  }
+
+  dimension: distance_range {
+    type: tier
+    style: integer
+    tiers: [0, 8, 16, 24, 28]
+    sql: ${distance} ;;
+    value_format: "0 \" ft\""
+  }
+
+  measure: shot_distribution {
+    type: percent_of_total
+    sql:  ${count};;
   }
 
   measure: average_distance {
     type: average
     sql: ${distance} ;;
+    value_format: "0.# \" ft\""
   }
 }
