@@ -6,7 +6,7 @@ view: pbp {
     type: number
     sql: ${TABLE}.EVENTMSGACTIONTYPE ;;
   }
-
+#
   dimension: is_shot {
     type: yesno
     sql: ${event_type}=1 OR ${event_type}=2 ;;
