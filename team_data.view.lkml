@@ -106,6 +106,7 @@ view: team_data {
     }
   }
 
+
   dimension: min {
     label: "MIN"
     description: "Minutes Played"
@@ -479,8 +480,33 @@ view: team_data {
     }
   }
 
+  dimension: conference {
+    type: string
+    sql: CASE WHEN ${team_name} IN ("Clippers",
+                                    "Grizzlies",
+                                    "Jazz",
+                                    "Kings",
+                                    "Lakers",
+                                    "Mavericks",
+                                    "Nuggets",
+                                    "Pelicans",
+                                    "Rockets",
+                                    "Spurs",
+                                    "Suns",
+                                    "Thunder",
+                                    "Timberwolves",
+                                    "Trail Blazers",
+                                    "Warriors") THEN "Western"
+              ELSE "Eastern"
+              END;;
+  }
+
   measure: win_percentage {
     type: number
     sql: ${wins}/${count} ;;
+    link: {
+      label: "Game Dashboard"
+      url: "/dashboards/7?Game={{ value }}"
+    }
   }
 }
