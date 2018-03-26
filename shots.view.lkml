@@ -76,11 +76,24 @@ WHERE VISITORDESCRIPTION IS NOT NULL AND EVENTMSGTYPE IN (1, 2))) ;;
     sql: CONCAT(${game_id}, ${event_num}) ;;
   }
 
+  dimension: made_shot {
+    type: yesno
+    sql: ${event_type} = 1 ;;
+  }
+
   measure: made_shots {
     type: count
     filters: {
       field: event_type
       value: "1"
+    }
+  }
+
+  measure: missed_shots {
+    type: count
+    filters: {
+      field: event_type
+      value: "2"
     }
   }
 
@@ -115,7 +128,7 @@ WHERE VISITORDESCRIPTION IS NOT NULL AND EVENTMSGTYPE IN (1, 2))) ;;
 
   measure: shooting_percentage_after_0 {
     type: number
-    sql: ${made_shots_after_0}/${shot_attempts_after_0} ;;
+    sql: ${made_shots_after_0}/NULLIF(${shot_attempts_after_0},0) ;;
     value_format: "0.00%"
   }
   measure: made_shots_after_1 {
@@ -140,7 +153,7 @@ WHERE VISITORDESCRIPTION IS NOT NULL AND EVENTMSGTYPE IN (1, 2))) ;;
 
   measure: shooting_percentage_after_1 {
     type: number
-    sql: ${made_shots_after_1}/${shot_attempts_after_1} ;;
+    sql: ${made_shots_after_1}/NULLIF(${shot_attempts_after_1},0) ;;
     value_format: "0.00%"
   }
   measure: made_shots_after_2 {
@@ -165,7 +178,7 @@ WHERE VISITORDESCRIPTION IS NOT NULL AND EVENTMSGTYPE IN (1, 2))) ;;
 
   measure: shooting_percentage_after_2 {
     type: number
-    sql: ${made_shots_after_2}/${shot_attempts_after_2} ;;
+    sql: ${made_shots_after_2}/NULLIF(${shot_attempts_after_2},0) ;;
     value_format: "0.00%"
   }
   measure: made_shots_after_3 {
@@ -190,7 +203,7 @@ WHERE VISITORDESCRIPTION IS NOT NULL AND EVENTMSGTYPE IN (1, 2))) ;;
 
   measure: shooting_percentage_after_3 {
     type: number
-    sql: ${made_shots_after_3}/${shot_attempts_after_3} ;;
+    sql: ${made_shots_after_3}/NULLIF(${shot_attempts_after_3},0) ;;
     value_format: "0.00%"
   }
 

@@ -76,6 +76,18 @@ explore: team_data {
     sql_on: ${team_data.game_id} = ${game_list.game_ids} ;;
     relationship: many_to_one
   }
+  # join: daily_seeding {
+  #   sql_on: ${daily_seeding.seeding_date} = ${game_list.game_date} AND ${daily_seeding.team_name} = ${team_data.team_name} ;;
+  #   type: inner
+  #   relationship: one_to_many
+  # }
+
+  # join: opponent_daily_seeding {
+  #   from: daily_seeding
+  #   sql_on: ${opponent_daily_seeding.seeding_date} = ${game_list.game_date} AND ${opponent_daily_seeding.team_name} = ${opponent_daily_seeding.team_name} ;;
+  #   type: inner
+  #   relationship: one_to_many
+  # }
 }
 
 

@@ -431,6 +431,11 @@ FROM (SELECT TEAM_ID,
     }
   }
 
+  measure: player_pic {
+    type: count
+    html: <img src="https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/{{player_season.team_id._value}}/2017/260x190/{{player_season.player_id._value}}.png" width="137" height="100"/> ;;
+    }
+
   set: detail {
     fields: [
       player_id,

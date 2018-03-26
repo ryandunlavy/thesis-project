@@ -69,10 +69,22 @@ view: daily_seeding {
     sql: ${TABLE}.wins ;;
   }
 
+  measure: max_wins {
+    type: max
+    sql: ${wins} ;;
+  }
+  measure: min_wins {
+    type: min
+    sql: ${wins} ;;
+  }
+
   dimension: losses {
     type: number
+    hidden: yes
     sql: ${TABLE}.losses ;;
   }
+
+
 
   dimension: conference_rank {
     type: number
@@ -93,6 +105,10 @@ view: daily_seeding {
   measure: highest_conference_rank {
     type: max
     sql:  ${conference_rank};;
+    link: {
+      label: "Game list"
+      url: "/explore/nba_project/team_data?fields=game_list.game_date,opposing_team.team_name,game_list.game_ids,team_data.pts,opposing_team.pts,team_data.reb,opposing_team.reb,team_data.ast,opposing_team.ast,team_data.won_game&f[game_list.game_date]={{ daily_seeding.seeding_date._value }}&f[team_data.team_name]={{ daily_seeding.team_name._value}}"
+    }
   }
   measure: lowest_conference_rank {
     type: min
