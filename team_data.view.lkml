@@ -503,10 +503,8 @@ view: team_data {
 
   measure: win_percentage {
     type: number
+    value_format: "0.00%"
     sql: ${wins}/${count} ;;
-    link: {
-      label: "Game Dashboard"
-      url: "/dashboards/7?Game={{ value }}"
-    }
+
   }
 }

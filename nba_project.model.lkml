@@ -25,7 +25,7 @@ explore: daily_seeding {
 }
 
 explore: player_season {
-  description: "test description"
+
 }
 
 explore: jump_ball {
@@ -47,6 +47,20 @@ explore: shots {
     type: left_outer
     relationship: many_to_one
   }
+  join: daily_seeding {
+    type: left_outer
+    sql_on: ${daily_seeding.team_name} = ${shots.player1_team_nickname} AND ${game_list.game_date} = ${daily_seeding.seeding_date} ;;
+    relationship: many_to_one
+  }
+  join: box_score {
+    type: left_outer
+    sql_on: ${box_score.player_name} = ${shots.player_name} AND ${box_score.game_id} = ${shots.game_id} ;;
+    relationship: many_to_one
+  }
+  join: team_data {
+    sql_on: ${team_data.game_id} = ${shots.game_id} AND ${shots.player1_team_nickname} = ${team_data.team_name} ;;
+    relationship: many_to_one
+  }
 }
 
 explore: play_by_play {
@@ -61,6 +75,7 @@ explore: play_by_play {
     type: left_outer
     relationship: many_to_one
   }
+
 }
 
 explore: game_list {}
@@ -83,6 +98,7 @@ explore: team_data {
     sql_on: ${team_data.game_id} = ${game_list.game_ids} ;;
     relationship: many_to_one
   }
+
   # join: daily_seeding {
   #   sql_on: ${daily_seeding.seeding_date} = ${game_list.game_date} AND ${daily_seeding.team_name} = ${team_data.team_name} ;;
   #   type: inner

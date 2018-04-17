@@ -276,6 +276,10 @@ WHERE VISITORDESCRIPTION IS NOT NULL AND EVENTMSGTYPE IN (1, 2))) ;;
   dimension: player_name {
     type: string
     sql: ${TABLE}.PLAYER_NAME ;;
+    link: {
+      label: "Player Dashboard"
+      url: "/dashboards/6?Player={{ value }}"
+    }
   }
 
   dimension: player_team_abbreviation {

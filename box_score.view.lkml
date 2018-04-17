@@ -1,6 +1,13 @@
 view: box_score {
   sql_table_name: nba_data.box_score ;;
 
+  dimension: id {
+    type: string
+    sql: CONCAT(${player_id}, ${game_id}) ;;
+    primary_key: yes
+    hidden: yes
+  }
+
 
 
 

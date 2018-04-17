@@ -304,7 +304,7 @@ view: pbp {
   measure: shooting_pct {
     label: "Shooting Percentage"
     type: number
-    sql: ${count_made}/${count_attempts} ;;
+    sql: ${count_made}/NULLIF(${count_attempts}, 0) ;;
     drill_fields: [player1_name, count_made, count_attempts]
     value_format: "0.00%"
   }
