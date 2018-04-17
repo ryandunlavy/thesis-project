@@ -64,12 +64,12 @@ FROM
 
   dimension: sub_in_time {
   type: number
-  sql: ${TABLE}.first_sub ;;
+  sql: ${TABLE}.sub_in_time ;;
   }
 
   dimension: sub_out_time {
     type: number
-    sql: ${TABLE}.second_sub ;;
+    sql: ${TABLE}.sub_out_time ;;
   }
 
 

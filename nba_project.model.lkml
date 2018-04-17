@@ -5,7 +5,6 @@ include: "*.view"
 
 # include all the dashboards
 include: "*.dashboard"
-#
 
 datagroup: nba_trigger {
   sql_trigger: SELECT MAX(GAMEet) FROM nba_data.pbp;;
@@ -15,7 +14,15 @@ persist_with: nba_trigger
 
 explore: loc {}
 
-explore: daily_seeding {}
+explore: daily_seeding {
+  join: team_data {
+    fields: [team_data.team_image, team_data.team_image_large]
+    sql_on: ${daily_seeding.team_name} = ${team_data.team_name} ;;
+    relationship: many_to_one
+    type: left_outer
+
+  }
+}
 
 explore: player_season {
   description: "test description"

@@ -9,6 +9,11 @@ view: game_list {
     sql: CAST(REPLACE (${TABLE}.date, "-", "") AS INT64);;
   }
 
+  dimension: date_string {
+    hidden: yes
+    sql: ${TABLE}.date ;;
+  }
+
 
   dimension: game_ids {
     type: string

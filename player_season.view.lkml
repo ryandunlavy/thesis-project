@@ -75,6 +75,7 @@ FROM (SELECT TEAM_ID,
   }
 
   dimension: player_id {
+    label: "Player ID"
     primary_key: yes
     type: string
     sql: ${TABLE}.PLAYER_ID ;;

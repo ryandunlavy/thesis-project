@@ -97,6 +97,16 @@ WHERE VISITORDESCRIPTION IS NOT NULL AND EVENTMSGTYPE IN (1, 2))) ;;
     }
   }
 
+  dimension: wctimestring {
+    sql: ${TABLE}.WCTIMESTRING ;;
+  }
+
+  dimension_group: shot {
+    type: time
+    datatype: timestamp
+    sql:PARSE_TIMESTAMP("%F %R %p", CONCAT(${game_list.date_string}, " ", ${wctimestring}), "US/Eastern") ;;
+  }
+
   measure: shot_attempts {
     type: count
   }

@@ -80,8 +80,16 @@ view: daily_seeding {
 
   dimension: losses {
     type: number
-    hidden: yes
     sql: ${TABLE}.losses ;;
+  }
+
+  measure: max_losses {
+    type: max
+    sql: ${losses} ;;
+  }
+  measure: min_losses {
+    type: min
+    sql: ${losses} ;;
   }
 
 
