@@ -50,13 +50,13 @@ view: loc {
     value_format: "0.# \" ft\""
   }
 
-  dimension: distance_range {
-    type: tier
-    style: integer
-    tiers: [0, 8, 16, 24, 30]
-    sql: ${distance} ;;
-    value_format: "0 \" ft\""
-  }
+#   dimension: distance_range {
+#     type: tier
+#     style: integer
+#     tiers: [0, 8, 16, 24, 30]
+#     sql: ${distance} ;;
+#     value_format: "0 \" ft\""
+#   }
 
   measure: shot_distribution {
     type: percent_of_total
