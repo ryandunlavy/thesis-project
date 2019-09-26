@@ -3,11 +3,8 @@ connection: "ryan-thesis"
 # include all the views
 include: "*.view"
 
-# include all the dashboards
-include: "*.dashboard"
-
 datagroup: nba_trigger {
-  sql_trigger: SELECT MAX(GAMEet) FROM nba_data.pbp;;
+  sql_trigger: SELECT MAX(GAME_ID) FROM nba_data.pbp;;
 }
 
 persist_with: nba_trigger

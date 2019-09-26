@@ -32,12 +32,12 @@ view: loc {
     drill_fields: []
   }
 
-  dimension: xfeet {
+  dimension: x {
     label: "X (in feet)"
     type: number
     sql: (${xloc})/10.0;;
   }
-  dimension: yfeet {
+  dimension: y {
     label: "Y (in feet)"
     type: number
     sql: (${yloc})/10.0;;
@@ -46,17 +46,17 @@ view: loc {
   dimension: distance {
     description: "Distance from basket (in feet)"
     type: number
-    sql: sqrt((${xfeet}*${xfeet})+(${yfeet}*${yfeet})) ;;
+    sql: sqrt((${x}*${x})+(${y}*${y})) ;;
     value_format: "0.# \" ft\""
   }
 
-#   dimension: distance_range {
-#     type: tier
-#     style: integer
-#     tiers: [0, 8, 16, 24, 30]
-#     sql: ${distance} ;;
-#     value_format: "0 \" ft\""
-#   }
+  dimension: distance_range {
+    type: tier
+    style: integer
+    tiers: [0, 8, 16, 24, 30]
+    sql: ${distance} ;;
+    value_format: "0 \" ft\""
+  }
 
   measure: shot_distribution {
     type: percent_of_total
