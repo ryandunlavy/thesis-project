@@ -9,7 +9,9 @@ datagroup: nba_trigger {
 
 persist_with: nba_trigger
 
-explore: loc {}
+explore: loc {
+  hidden: yes
+}
 
 explore: daily_seeding {
   join: team_data {
@@ -22,7 +24,7 @@ explore: daily_seeding {
 }
 
 explore: player_season {
-
+  #hidden: yes
 }
 
 explore: jump_ball {
@@ -75,7 +77,9 @@ explore: play_by_play {
 
 }
 
-explore: game_list {}
+explore: game_list {
+  hidden: yes
+}
 explore: box_score {
   join: game_list {
     sql_on: ${box_score.game_id} = ${game_list.game_ids} ;;
@@ -83,7 +87,9 @@ explore: box_score {
   }
 }
 
-explore: seeding {}
+explore: seeding {
+  hidden: yes
+}
 
 explore: team_data {
   join: opposing_team {
