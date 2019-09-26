@@ -1,6 +1,6 @@
 view: shots {
   derived_table: {
-    datagroup_trigger: nba_trigger
+    #datagroup_trigger: nba_trigger
     sql: (SELECT *, CASE WHEN GAME_ID!=game_3 OR attempt_3 != 1 THEN 0
                WHEN (attempt_3=1) AND (attempt_2!=1 OR GAME_ID!=game_2) THEN 1
                WHEN (attempt_2=1) AND (attempt_1!=1 OR GAME_ID!=game_1) THEN 2
