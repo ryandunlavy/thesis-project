@@ -13,6 +13,8 @@ view: pbp {
     sql: ${event_type}=1 OR ${event_type}=2 ;;
   }
 
+## new comment
+
   dimension: id {
     hidden: yes
     type: string
